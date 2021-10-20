@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const table = require('console.table');
-const { type } = require('os');
+
 
 
 
@@ -78,7 +78,7 @@ function viewRoles(){
 }
 
 function viewEmployees(){
-    var select = 'SELECT * FROM employee';
+    var select = "SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT (manager.first_name, ' ',manager.last_name) AS manager FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id";
     db.query(select,function(err,res){
         if(err)throw err;
         console.table(res)
@@ -117,7 +117,7 @@ function addRoles(){
     ]) .then(function(answer){
         const results = [ answer.addRole, answer.salary];
         const select = 'SELECT name, id FROM department';
-        db.query(select,function(err,res){
+        db.query(select,function(err,data){
             if (err) throw err;
 
             const depart = data.map(({name,id}) => ({name: name, value: id}));
@@ -132,7 +132,7 @@ function addRoles(){
             ]) .then(function(departChoice){
                 const depart = departChoice.depart;
                 results.push(depart);
-                const select = 'INSERT INTO role (title, salary,department_id) VALUES(?,?,?)';
+                const select = 'INSERT INTO roles (title, salary,department_id) VALUES(?,?,?)';
                 db.query(select,results,function(err,res){
                     if (err) throw err;
                     console.log(answer.addRole + ' has been added to the database');
