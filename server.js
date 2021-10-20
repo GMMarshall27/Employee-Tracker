@@ -16,7 +16,7 @@ const db = mysql.createConnection(
 
   db.connect(function(err){
       if (err) throw err;
-      
+      start();
   })
 
   function start() {
@@ -57,5 +57,13 @@ const db = mysql.createConnection(
                     updateEmployee();
                     break;
           }
+      })
+  }
+  function viewDeparments(){
+      var select = 'SELECT * FROM department'
+      db.query(select, function(err,res) {
+          if(err)throw err;
+          console.table(res)
+          start()
       })
   }
