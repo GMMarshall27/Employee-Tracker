@@ -64,6 +64,23 @@ const db = mysql.createConnection(
       db.query(select, function(err,res) {
           if(err)throw err;
           console.table(res)
-          start()
+          start();
       })
   }
+function viewRoles(){
+    var select = 'SELECT * FROM roles'
+    db.query(select,function(err,res) {
+        if(err)throw err
+        console.table(res)
+        start();
+    })
+}
+
+function viewEmployees(){
+    var select = 'SELECT * FROM employee';
+    db.query(select,function(err,res){
+        if(err)throw err
+        console.table(res)
+        start();
+    })
+}
