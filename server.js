@@ -55,7 +55,7 @@ const db = mysql.createConnection(
                     addEmployee();
                     break;
                 case 'Update an employee role':
-                    updateEmployee();
+                    updateEmployeeRole();
                     break;
           }
       })
@@ -191,7 +191,7 @@ function addEmployee() {
                         const select = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ( ?, ?, ?, ?)';
                         db.query(select,results,function(err,res){
                             if (err) throw err;
-                            console.log('The employee has been added to database')
+                            console.log( answer.firstName + " " + answer.lastName + ' has been added to database')
                             start();
                         });
                     });
@@ -201,4 +201,60 @@ function addEmployee() {
     });
     };
 
-    
+    function updateEmployeeRole (){
+        const select = `SELECT * FROM employee`;
+
+        db.query(select, function(err, data){
+          if (err) throw err; 
+      
+        const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+      
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'employee',
+              message: "Which employee's role do you want to update?",
+              choices: employees
+            }
+          ])
+            .then(employeeSelect => {
+              const employee = employeeSelect.employee;
+              const results = []; 
+              results.push(employee);
+      
+              const select = `SELECT * FROM roles`;
+      
+              db.query(select, function (err, data) {
+                if (err) throw err; 
+      
+                const role = data.map(({ id, title }) => ({ name: title, value: id }));
+                
+                  inquirer.prompt([
+                    {
+                      type: 'list',
+                      name: 'roles',
+                      message: "Which role do you want to assign the selected employee?",
+                      choices: role
+                    }
+                  ])
+                      .then(roleChoice => {
+                      const role = roleChoice.roles;
+                      results.push(role); 
+                      
+                      let employee = results[0]
+                     results[0] = role
+                      results[1] = employee 
+                
+                      const update = `UPDATE employee SET role_id = ? WHERE id = ?`;
+      
+                      db.query(update, results, function (err, res) {
+                        if (err) throw err;
+                      console.log("Updated employee's role");
+                            start();
+                        })
+                    })
+                })
+            })
+        })
+      };
+      
