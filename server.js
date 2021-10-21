@@ -142,3 +142,13 @@ function addRoles(){
         });
     });
 };
+
+function addEmployee(){
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: ''
+        }
+    ])
+}
