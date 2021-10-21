@@ -1,10 +1,8 @@
+//import mysql2, inquirer, and console.table
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const table = require('console.table');
-
-
-
-
+//creates database connection
 const db = mysql.createConnection(
     {
       host: 'localhost',
@@ -19,7 +17,7 @@ const db = mysql.createConnection(
       if (err) throw err;
       start();
   })
-
+//function to start the inquirer prompt once the database has connected. 
   function start() {
       inquirer .prompt({
           name: 'menu',
@@ -60,6 +58,7 @@ const db = mysql.createConnection(
           }
       })
   }
+  //function that shows all the departments
   function viewDeparments(){
       var select = 'SELECT * FROM department'
       db.query(select, function(err,res) {
@@ -68,6 +67,7 @@ const db = mysql.createConnection(
           start();
       })
   }
+  //function that shows all of the roles
 function viewRoles(){
     var select = 'SELECT * FROM roles'
     db.query(select,function(err,res) {
@@ -76,7 +76,7 @@ function viewRoles(){
         start();
     })
 }
-
+//function that shows all the employees
 function viewEmployees(){
     var select = "SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT (manager.first_name, ' ',manager.last_name) AS manager FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id";
     db.query(select,function(err,res){
@@ -85,6 +85,7 @@ function viewEmployees(){
         start();
     })
 }
+//function to add a department
 function addDepartment(){
     inquirer.prompt([
         {
@@ -101,7 +102,7 @@ function addDepartment(){
         })
     })
 }
-
+//function to add a role
 function addRoles(){
     inquirer.prompt([
         {
@@ -142,7 +143,7 @@ function addRoles(){
         });
     });
 };
-
+//function to add an employee
 function addEmployee() { 
     inquirer.prompt([
         {
@@ -200,7 +201,7 @@ function addEmployee() {
         });
     });
     };
-
+// function to update employees role
     function updateEmployeeRole (){
         const select = `SELECT * FROM employee`;
 
