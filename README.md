@@ -6,7 +6,7 @@
   Employee tracker is an application for a companies employee data base. This is built with MYSQL, node.js, and inquirer.
 
   Demo video below:
-  
+  https://drive.google.com/drive/folders/1kf7JVqt2zz7jiVS_uDHHJRAXLcWp0bfu?usp=sharing
 
   ## Table of Contents
 
